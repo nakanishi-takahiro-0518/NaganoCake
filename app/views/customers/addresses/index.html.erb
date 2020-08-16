@@ -1,0 +1,40 @@
+<h2 class="section-ttl">配送先登録 / 一覧</h2>
+<%= form_for(@address, html: { class: "address_form" }) do |f| %>
+	<%= render 'layouts/error_messages', resource: @address %>
+	<div class="field">
+		<%= f.label :postal_code, "郵便番号(ハイフンなし7桁)" %>
+		<%= f.text_field :postal_code, autocomplete: "postal_code", placeholder: "郵便番号", class: "jpostal_code" %>
+	</div>
+	<div class="field">
+		<%= f.label :destination, "住所(郵便番号から自動入力)" %>
+		<%= f.text_field :destination, autocomplete: "destination", placeholder: "住所", class: "jpostal_address" %>
+	</div>
+	<div class="field">
+		<%= f.label :name, "宛名" %>
+		<%= f.text_field :name, autocomplete: "name", placeholder: "宛名" %>
+		<%= f.submit '登録する', class: "btn btn-primary" %>
+	</div>
+<% end %>
+<table class="addresses mt2 has_border">
+    <thead>
+        <tr>
+            <th>郵便番号</th>
+            <th>住所</th>
+            <th>宛名</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @addresses.each do |address| %>
+            <tr>
+                <td class="text-center"><%= address.postal_code %></td>
+                <td><%= address.destination %></td>
+                <td><%= address.name %></td>
+                <td class="text-center">
+                    <%= link_to "編集", edit_address_path(address), class: "btn btn-success" %>
+                    <%= link_to "削除", address_path(address.id), method: :delete, "data-confirm" => "削除します。本当によろしいですか？", class: "btn btn-danger" %>
+                </td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>

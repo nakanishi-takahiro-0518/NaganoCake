@@ -1,0 +1,43 @@
+<div class="inner">
+    <% if params[:genre_id] %>
+        <h2 class="section-ttl"><%= @genre.name %>の商品一覧 (全<%= @items_count %>件)</h2>
+    <% else %>
+        <h2 class="section-ttl">商品一覧 (全<%= @items_count %>件)</h2>
+    <% end %>
+    <h4 class="text-right">
+        <%= link_to "新規商品登録", new_admins_item_path, class: "new_admin_item" %>
+    </h4>
+    <% if @items.first %> <!-- @item.existsと同義、SQL1個分削減(?) -->
+        <table class="admin_items has_border">
+            <thead>
+                <tr>
+                    <th>商品ID</th>
+                    <th>商品名</th>
+                    <th>税抜価格</th>
+                    <th>ジャンル</th>
+                    <th>販売ステータス</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% @items.each do |item| %>
+                    <tr>
+                        <td class="text-center"><%= item.id %></td>
+                        <td><%= link_to item.name, admins_item_path(item), class: "underline" %></td>
+                        <td class="text-center"><%= item.price %>円</td>
+                        <td><%= link_to item.genre.name, admins_items_path(genre_id: item.genre_id) %></td>
+                        <td>
+                            <% if item.is_active? %>
+                                <span class="text-active">販売中</span>
+                            <% else %>
+                                <span class="text-invalid">販売停止中</span>
+                            <% end %>
+                        </td>
+                    </tr>
+                <% end %>
+            </tbody>
+        </table>
+        <%= paginate @items %>
+    <% else %>
+        <h3>対応する商品はありませんでした。</h3>
+    <% end %>
+</div>
